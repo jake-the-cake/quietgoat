@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --primary-hue: 85;
+  --primary-hue: 95;
 
-  --primary: var(--primary-hue), 61%, 21%;
-  --accent: var(--primary-hue), 41%, 41%;
+  --primary: var(--primary-hue), 85%, 19%;
+  --accent: var(--primary-hue), 55%, 39%;
 
   --dark: 0, 0%, 8%;
   --light: var(--primary-hue), 100%, 92%;
@@ -20,7 +20,6 @@ html {
 
 body {
   color: hsl(var(--light));
-  background-color: hsl(var(--dark));
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -29,7 +28,8 @@ body {
 }
 
 .navigation__container {
-  background-color: hsl(var(--primary));
+  padding-block: 1rem;
+  background-color: hsl(var(--primary), .4);
   position: fixed;
   width: 100vw;
   top: 0;
@@ -47,4 +47,14 @@ body {
 .post__container {
   width: var(--content-w);
   margin: auto;
+}
+
+.logo {
+  width: 3rem;
+}
+
+.brand {
+  color: hsl(var(--primary));
+  font-weight: 700;
+  font-variant: small-caps;
 }
