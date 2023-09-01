@@ -58,3 +58,8 @@ body {
   font-weight: 700;
   font-variant: small-caps;
 }
+
+.active {
+  /* visibility: hidden; */
+  display: none;
+}

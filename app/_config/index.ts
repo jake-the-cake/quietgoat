@@ -1,7 +1,9 @@
 import meta from "./meta"
+import { navlinks } from "./navlinks"
 
 const CONFIG = {
-  meta
+  meta,
+  navlinks
 }
 
 export { CONFIG }
