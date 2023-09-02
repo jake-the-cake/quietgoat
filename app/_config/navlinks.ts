@@ -1,26 +1,26 @@
 const navlinks = [
 	{
-		label: 'Featured',
+		text: 'Featured',
 		href: '/',
 		blob: 'This is the featured section.'
 	},
 	{
-		label: 'Trail Tales',
+		text: 'Trail Tales',
 		href: '/trail-tales',
 		blob: 'This is the trail tales section.'
 	},
 	{
-		label: 'Park Series',
+		text: 'Park Series',
 		href: '/park-series',
 		blob: 'This is the park series section.'
 	},
 	{
-		label: 'Lifestyle',
+		text: 'Lifestyle',
 		href: '/lifestyle',
 		blob: 'This is the lifestyle section.'
 	},
 	{
-		label: 'Viewpoints',
+		text: 'Viewpoints',
 		href: '/viewpoints',
 		blob: 'This is the viewpoints section.'
 	},

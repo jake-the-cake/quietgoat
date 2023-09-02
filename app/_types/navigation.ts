@@ -3,10 +3,11 @@ interface NavLinkObject {
 }
 
 interface NavLinkInfo {
-  href: string
-  label: string
+  href?: string
+  src?: string
+  text?: string
   blob?: string
-	isActive?: true
+	// isActive?: true
 }
 
 interface NavLinkProps {
