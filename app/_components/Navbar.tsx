@@ -5,7 +5,6 @@ import { CONFIG } from '../_config'
 import Logo from './Logo'
 import Link from 'next/link'
 import { useToggleActiveElements } from '../_quiggle/useToggleActiveElement'
-import Loading from '../loading'
 
 
 // class LinkSlider {
@@ -155,20 +154,18 @@ function ToggleActiveElement({ containerId, classList, elementType, elementData 
 
   
   return (
-    <Suspense fallback={ <Loading /> }>
-      <ul id={ containerId } className={ 'flex ' + (classList || '') }>
-        {
-          elementData.map((element, i)=> (
-              <li key={ `toggle-element-${ i }` }>
-                <ToggleElement
-                  elementType={ elementType }
-                  element={ element }
-                />
-              </li>
-          ))
-        }
-      </ul>
-    </Suspense>
+    <ul id={ containerId } className={ 'flex ' + (classList || '') }>
+      {
+        elementData.map((element, i)=> (
+            <li key={ `toggle-element-${ i }` }>
+              <ToggleElement
+                elementType={ elementType }
+                element={ element }
+              />
+            </li>
+        ))
+      }
+    </ul>
   )
 }
 
@@ -178,8 +175,8 @@ function Navbar() {
   
 
   return (
-    <nav className='w-full h-20 navigation__container'>
-      <div className="brand flex gap-1 items-center between">
+    <nav className='w-full h-20 max-w-screen-lg navigation__container'>
+      <div className="brand flex gap-1 items-center">
         <Logo
           id='logo'
         />

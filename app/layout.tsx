@@ -21,9 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <div className="relative max-w-screen-lg flex flex-col flex-between page__wrapper">
         <Navbar />
           {children}
         <Footer />
+        </div>
       </body>
     </html>
   )

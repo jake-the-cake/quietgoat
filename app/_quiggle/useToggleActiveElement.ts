@@ -9,7 +9,7 @@ function useToggleActiveElements(containerId: string) {
 	// Set up unique IDs and styles for li and a elements
 	navLinks.forEach((link, index) => {
 		const li = link.parentElement!;
-		const defaultWidth = link.offsetWidth + 16 + 'px'
+		const defaultWidth = link.offsetWidth + 32 + 'px'
 		li.id = `navlinkli${index}`;
 		link.id = `navlinka${index}`;
 		li.style.width = defaultWidth;
@@ -17,7 +17,7 @@ function useToggleActiveElements(containerId: string) {
 		li.style.overflow = 'hidden';
 		li.style.display = 'flex'
 		li.style.position = 'relative';
-		link.style.right = '0.5rem';
+		link.style.right = '1rem';
 		link.style.position = 'absolute';
 
 		// Create an array of link objects
@@ -32,7 +32,7 @@ function useToggleActiveElements(containerId: string) {
 
 		// Add click event listeners to handle sliding animations
 		link.addEventListener('click', (e) => {
-			e.preventDefault();
+			// e.preventDefault();
 			toggleLinkVisibility(linkObject);
 			toggleLinkVisibility(linkObjectArray[GLOBALS.activeIndex])
 			GLOBALS.activeIndex = linkObject.index
@@ -43,9 +43,7 @@ function useToggleActiveElements(containerId: string) {
 
 	// Check for the active index based on the current window.location.pathname
 	const currentPathname = window.location.pathname;
-	console.log(currentPathname)
 	const activeIndex = linkObjectArray.findIndex(link => link.href === currentPathname);
-	console.log(activeIndex)
 	// Slide the active link open
 	if (activeIndex >= 0) {
 		// linkObjectArray[activeIndex].active = true
@@ -56,7 +54,6 @@ function useToggleActiveElements(containerId: string) {
 const linkObjectArray: any[] = [];
 
 function toggleLinkVisibility(linkObject: any) {
-	console.log(linkObject)
 	const li = document.getElementById(`navlinkli${linkObject.index}`)!;
 	const link = document.getElementById(`navlinka${linkObject.index}`);
 
@@ -86,5 +83,6 @@ function parseIntAsNumber(targetId: any) {
 }
 
 export { useToggleActiveElements }
+
 // Call the setup function when the DOM is ready
 // window.addEventListener('DOMContentLoaded', setupNavigation);
