@@ -1,32 +1,60 @@
+'use client'
+
 import Link from 'next/link'
 import React from 'react'
 
-interface PostProps {
-  post: {
-    _id: string
-    title: string
-    category: string
-    story: string
-    caption?: string
-  }
+export interface IPost {
+  _id: string
+  title: string
+  category: string
+  story: string
+  caption?: string
 }
 
-function Post({ post }: PostProps): JSX.Element  {
+export interface PostProps {
+  post: IPost
+  preview?: true
+}
+
+function Post({ post, preview }: PostProps): JSX.Element  {
+  const parentElementClassList = [
+    'post__container',
+    'p-4'
+  ]
+  if (preview === true) parentElementClassList.push('post__container--preview')
+
+  const EntryTitle = <h1 className="post__header text-primary text-2xl font-bold">{ post.title }</h1>
+
   return (
-    <article className='post__container p-4'>
-      <Link href={ post.category + '/entries/' + post._id }>
-      <h1 className="post__header text-primary text-2xl font-bold">{ post.title }</h1>
-      </Link>
-      {
-        post?.caption
-        ? <h3 className="post__caption text-grey italic text-sm">{ post.caption }</h3>
-        : null
-      }
-      <section className="text-black pt-4">
+    <article className={ parentElementClassList.join(' ') }>
+      
+      { preview 
+          ? <Link href={ '/entries/' + post._id }> 
+              { EntryTitle }
+            </Link>
+          : <>{ EntryTitle }</> }
+
+      { post?.caption
+          ? <h3 className="post__caption text-grey italic text-sm">
+              { post.caption }
+            </h3>
+          : null }
+
+      <section
+        className="text-black pt-4"
+        onClick={ preview 
+          ? unhidePreview
+          : () => false }
+      >
         { post.story }
       </section>
+
     </article>
   )
+}
+
+function unhidePreview(event: any) {
+  event.target.parentNode.classList.remove('post__container--preview')
 }
 
 export { Post }

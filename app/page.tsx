@@ -11,6 +11,7 @@ export default async function Home() {
         data.map((post: any, i: number) => (
           <Post
             post={ post }
+            preview={ true }
           />
 
         ))
