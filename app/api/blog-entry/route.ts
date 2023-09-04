@@ -1,43 +1,26 @@
-// import { NextApiRequest, NextApiResponse } from "next"
-
-// export default function handler(req: NextApiRequest, res: NextApiResponse) {
-// 	const reqMethod = req.method
-// 	const reqBody = JSON.parse(String(req.body))
-// 	console.log(req.body)
-// 	switch (reqMethod) {
-// 		case 'POST':
-// 		default: console.log('wtf')
-// 	}
-// }
-
+import { BlogEntry } from '@/app/_database/_models/entry';
+import connectDB from '@/app/_database/db';
+import { basicErrorLog } from '@/app/_experimental/errors';
 import { NextResponse } from 'next/server';
 
-async function toJSON(body: any) {
-  const reader = body.getReader(); // `ReadableStreamDefaultReader`
-  const decoder = new TextDecoder();
-  const chunks: any[] = [];
+export async function POST(req: Request){
+	try {
+		await connectDB()
+		const data = Object.fromEntries(new URL(req.url).searchParams.entries())
 
-  async function read() {
-    const { done, value } = await reader.read();
+		// if (!validateData(data, {})) return
 
-    // all chunks have been read?
-    if (done) {
-      return JSON.parse(chunks.join(''));
-    }
-
-    const chunk = decoder.decode(value, { stream: true });
-    chunks.push(chunk);
-    return read(); // read the next chunk
-  }
-
-  return read();
+		const newPost = new BlogEntry(data)
+		// newPost.save()
+		return NextResponse.json(newPost)
+	}
+	catch (error) { basicErrorLog(error) }
 }
 
-export async function POST(req: Request){
-	const reader = req.body?.getReader()
-
-	// const requestBody = JSON.parse(req.body as any);
-	// console.log(requestBody)
-	console.log(req.body)
-	return NextResponse.json(await toJSON(req.body))  
+function validateData(data: {[key: string]: any}, validators: {[key: string]: any}): void | { errors: any[] } {
+	Object.entries(validators).forEach((entry: any[], i: number) => {
+		const [key, obj] = entry
+		if (data[key]) console.log(key)
+	})
+	return
 }

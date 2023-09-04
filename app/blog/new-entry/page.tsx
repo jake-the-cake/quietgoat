@@ -1,8 +1,9 @@
 'use client'
 
 import { CONFIG } from '@/app/_config'
+import { useFormSubmission } from '@/app/_experimental/useApi'
 import { parseIntAsNumber } from '@/app/_quiggle/parse/int'
-import React, { FormEvent, MouseEvent } from 'react'
+import React, { MouseEvent } from 'react'
 
 interface FormDataProps {
 	selectedIndex: null | number
@@ -14,25 +15,6 @@ const Page = ({}) => {
 	}
 	const entryTypes = CONFIG.navlinks.slice(1)
 	
-	function handleSubmitNewEntry(event: FormEvent<HTMLFormElement>) {
-		event.preventDefault()
-		const formData = Array.from(new FormData(event.target as HTMLFormElement))
-		const data: { [key: string]: any } = {}
-		formData.forEach(d => {
-			console.log(data)
-			data[d[0]] = d[1]
-		})
-		fetch('http://localhost:3000/api/blog-entry', {
-			method: 'POST',
-			headers: {
-					"Content-Type": "application/x-www-form-urlencoded",
-			},
-			body: JSON.stringify(data)
-		})//.then(response => response.json())
-		.then(data => console.log(data.json()))
-		.catch(error => console.log(error))
-	}
-
 	function handleSelectedItem(e: MouseEvent<HTMLDivElement>) {
 		const selectorInput = document.getElementById('category-selection') as HTMLInputElement
 
@@ -66,7 +48,7 @@ const Page = ({}) => {
 		<div
 			className='card__container--full'
 		>
-			<form className='flex flex-col gap-6' onSubmit={ handleSubmitNewEntry } id="new-post-form">
+			<form className='flex flex-col gap-6' onSubmit={ useFormSubmission('/blog-entry', 'POST') } id="new-post-form">
 				<h1 className='text-3xl text-primary font-bold'>New Blog Entry</h1>
 				<div
 					className="flex flex-col gap-1 form-section__container"
