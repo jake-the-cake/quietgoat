@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --primary-hue:   280;
+  --primary-hue:   85;
 
   --primary: var(--primary-hue), 85%, 19%;
   --accent: var(--primary-hue), 55%, 39%;
@@ -25,6 +25,8 @@ body {
   min-height: 100vh;
   justify-content: space-between;
   background-color: hsl(var(--primary));
+  box-shadow: inset 15px 0 15px -10px hsl(var(--dark)),
+              inset -15px 0 15px -10px hsl(var(--dark));
 }
 
 .page__wrapper {
@@ -122,7 +124,8 @@ footer {
   box-shadow: 0 5px 12px -4px hsl(var(--dark), .8);
 }
 
-.form-section__container {
+.form-section__container,
+.post__container {
   background-color: whitesmoke;
   letter-spacing: 1.2px;
   border-radius: 1rem;
@@ -216,7 +219,8 @@ footer {
 
 .btn__primary--outline:hover {
   border-color: hsl(var(--primary));
-    color: hsl(var(--primary));
+  background-color: hsl(var(--primary));
+  color: hsl(var(--light));
 }
 
 .btn__primary:hover {
@@ -232,4 +236,8 @@ footer {
 .entry-form__actions span {
   color: hsl(var(--accent), .8);
   cursor: pointer;
+}
+
+#link-container li {
+  transition: .5s width ease;
 }

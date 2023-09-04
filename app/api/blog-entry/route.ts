@@ -11,7 +11,7 @@ export async function POST(req: Request){
 		// if (!validateData(data, {})) return
 
 		const newPost = new BlogEntry(data)
-		// newPost.save()
+		newPost.save()
 		return NextResponse.json(newPost)
 	}
 	catch (error) { basicErrorLog(error) }

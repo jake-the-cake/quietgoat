@@ -10,10 +10,12 @@ function useFormSubmission(url: string, method: string) {
 		const params = new URLSearchParams(Object.fromEntries(form.entries() as any))
 
 		try {
-			const response = await fetch('http://localhost:3000/api' + url + '?' + params, {
+			const response = await fetch('http://127.0.0.1:3000/api' + url + '?' + params, {
 				method: method,
+				mode: 'cors',
 				headers: {
 						"Content-Type": "application/json",
+						'Access-Control-Allow-Headers': '*'
 				}
 			})
 			if (!response.ok) return basicErrorLog(new ApiError(response.status, 'Response was not ok.'))
