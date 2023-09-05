@@ -19,7 +19,9 @@ function useFormSubmission(url: string, method: string) {
 				}
 			})
 			if (!response.ok) return basicErrorLog(new ApiError(response.status, 'Response was not ok.'))
-			return await response.json()
+			const data = await response.json()
+			if (data.category) window.location.href = data.category
+			return data
 		}
 		catch (error: any) {
 			return basicErrorLog(error)
