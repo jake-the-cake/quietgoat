@@ -19,11 +19,13 @@ export interface PostProps {
 function Post({ post, preview }: PostProps): JSX.Element  {
   const parentElementClassList = [
     'post__container',
-    'p-4'
+    'px-7 py-4'
   ]
   if (preview === true) parentElementClassList.push('post__container--preview')
 
   const EntryTitle = <h1 className="post__header text-primary text-2xl font-bold">{ post.title }</h1>
+
+  const story = post.story.split('\n')
 
   return (
     <article className={ parentElementClassList.join(' ') }>
@@ -41,20 +43,23 @@ function Post({ post, preview }: PostProps): JSX.Element  {
           : null }
 
       <section
-        className="text-black pt-4"
+        className="text-black pt-4 flex flex-col gap-2"
         onClick={ preview 
           ? unhidePreview
           : () => false }
       >
-        { post.story }
+        { story.map((paragraph: string, i: number) => <p key={`paragraph-${ i }`}>{ paragraph }</p>) }
       </section>
 
     </article>
   )
 }
 
+// function 
+
+
 function unhidePreview(event: any) {
-  event.target.parentNode.classList.remove('post__container--preview')
+  event.target.closest('article').classList.remove('post__container--preview')
 }
 
 export { Post }

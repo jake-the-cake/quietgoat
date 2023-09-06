@@ -6,10 +6,11 @@ import { NextResponse } from 'next/server';
 export async function POST(req: Request){
 	try {
 		await connectDB()
-		const data = Object.fromEntries(new URL(req.url).searchParams.entries())
 
 		// if (!validateData(data, {})) return
 
+		const data = await req.json()
+		console.log(data)
 		const newPost = new BlogEntry(data)
 		newPost.save()
 		return NextResponse.json(newPost)

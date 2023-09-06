@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --primary-hue: 0;
+  --primary-hue: 260;
 
   --primary: var(--primary-hue), 85%, 19%;
   --accent: var(--primary-hue), 55%, 39%;
@@ -27,6 +27,14 @@ body {
   background-color: hsl(var(--primary));
   box-shadow: inset 15px 0 15px -10px hsl(var(--dark)),
               inset -15px 0 15px -10px hsl(var(--dark));
+}
+
+pre {
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
 }
 
 .page__wrapper {
