@@ -5,7 +5,8 @@ import { db } from "./database"
 const CONFIG = {
   meta,
   navlinks,
-  db
+  db,
+  baseUri: process.env.SERVER_BASE_URI || 'http://localhost:3000'
 }
 
 export { CONFIG }

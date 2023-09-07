@@ -21,7 +21,6 @@ function useFormSubmission(url: string, method: string) {
 				formData[key] = value.toString()
 			})
 
-			// const formData = JSON.stringify(Object.fromEntries(form.entries()))
 			const response = await fetch(CONFIG.db.uri + '/api' + url, {
 				method: method,
 				mode: 'cors',
@@ -47,8 +46,9 @@ function useFormSubmission(url: string, method: string) {
 						links.forEach(parent => {
 							const link: HTMLAnchorElement = parent.firstChild as HTMLAnchorElement
 							if (link.pathname === category) {
+								// @ts-ignore
+								link.onclick = useToggleActiveElements('link-container')
 								link.click()
-								// useToggleActiveElements('link-container')
 							}
 						})
 					}

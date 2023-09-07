@@ -1,8 +1,11 @@
 import Image from 'next/image'
 import { Post } from './_components/Post'
+import { CONFIG } from './_config'
 
 export default async function Home() {
-  const response = await fetch('http://127.0.0.1:3000/api/entries/read-all')
+  const response = await fetch(CONFIG.baseUri + '/api/entries/read-all', {
+    cache: 'no-cache'
+  })
   const data = await response.json()
 
   return (
