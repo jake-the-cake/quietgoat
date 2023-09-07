@@ -1,6 +1,9 @@
 'use client'
 import React, { useEffect } from 'react'
 import { Post } from '../_components/Post'
+import { CONFIG } from '../_config'
+import { useGetJsonData } from '../_experimental/api'
+import { useToggleActiveElements } from '../_quiggle/useToggleActiveElement'
 
 async function Page () {
 	// let posts: any[] = []
@@ -27,8 +30,11 @@ async function Page () {
 }
 
 export async function populateByCategory() {
-	const response = await fetch('http://127.0.0.1:3000/api/entries/read-all')
-	const data = await response.json()
+	// const response = await fetch(CONFIG.db.uri + '/api/entries/read-all')
+	// = await response.json()
+	// useToggleActiveElements('link-container')
+
+	const data = await useGetJsonData('/api/entries/read-all', {})
 	const posts = await data.filter((post: any) => post.category === window.location.pathname)
 	return posts
 }

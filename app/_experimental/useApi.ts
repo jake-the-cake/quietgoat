@@ -1,6 +1,11 @@
 import { ApiError } from "next/dist/server/api-utils"
 import { FormEvent } from "react"
 import { basicErrorLog } from "./errors"
+import { CONFIG } from "../_config"
+import { useToggleActiveElements } from "../_quiggle/useToggleActiveElement"
+
+type ValueUnknownVoid = (value: unknown ) => void
+type ReasonAnyVoid = (reason?: any) => void
 
 function useFormSubmission(url: string, method: string) {
 	return async (event: FormEvent<HTMLFormElement>) => {
@@ -17,7 +22,7 @@ function useFormSubmission(url: string, method: string) {
 			})
 
 			// const formData = JSON.stringify(Object.fromEntries(form.entries()))
-			const response = await fetch('http://127.0.0.1:3000/api' + url, {
+			const response = await fetch(CONFIG.db.uri + '/api' + url, {
 				method: method,
 				mode: 'cors',
 				headers: {
@@ -28,7 +33,29 @@ function useFormSubmission(url: string, method: string) {
 			})
 			if (!response.ok) return basicErrorLog(new ApiError(response.status, 'Response was not ok.'))
 			const data = await response.json()
-			if (data.category) window.location.href = data.category
+			if (data.category) {
+				new Promise((ok: ValueUnknownVoid, fail: ReasonAnyVoid) => {
+					if (
+						typeof data.category === 'string'
+						&& data.category[0] === '/'
+					) ok(data.category)
+					else fail(new SyntaxError('Invalid category format.'))
+				})
+				.then((category: any) => {
+					try {
+						const links = Array.from(document.getElementById('link-container')!.children)
+						links.forEach(parent => {
+							const link: HTMLAnchorElement = parent.firstChild as HTMLAnchorElement
+							if (link.pathname === category) {
+								link.click()
+								// useToggleActiveElements('link-container')
+							}
+						})
+					}
+					catch (err) { basicErrorLog(err) }
+				})
+				.catch(basicErrorLog)
+			}
 			return data
 		}
 		catch (error: any) {

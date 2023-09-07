@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect } from 'react'
 import { Post } from '../_components/Post'
+import { populateByCategory } from '../viewpoints/page'
 
 async function Page () {
 	// let posts: any[] = []
@@ -24,15 +25,6 @@ async function Page () {
 				}
     </main>
 	)
-}
-
-export async function populateByCategory() {
-	const response = await fetch('http://127.0.0.1:3000/api/entries/read-all', {
-		cache: 'no-cache'
-	})
-	const data = await response.json()
-	const posts = await data.filter((post: any) => post.category === window.location.pathname)
-	return posts
 }
 
 export default Page

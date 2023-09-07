@@ -135,7 +135,7 @@ footer {
 .post__container {
   background-color: whitesmoke;
   letter-spacing: 1.2px;
-  border-radius: .5rem;
+  border-radius: .2rem;
   overflow: hidden;
   box-shadow: 0 3px 5px -2px hsl(var(--dark), .8);
   position: relative;

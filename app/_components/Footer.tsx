@@ -1,9 +1,10 @@
+import Link from 'next/link'
 import React from 'react'
 
 function Footer(): JSX.Element  {
   return (
     <footer>
-      Footer
+      <Link href={'/blog/new-entry'}>Create New Entry</Link>
     </footer>
   )
 }

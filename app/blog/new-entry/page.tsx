@@ -3,6 +3,7 @@
 import { CONFIG } from '@/app/_config'
 import { useFormSubmission } from '@/app/_experimental/useApi'
 import { parseIntAsNumber } from '@/app/_quiggle/parse/int'
+import { useToggleActiveElements } from '@/app/_quiggle/useToggleActiveElement'
 import React, { MouseEvent } from 'react'
 
 interface FormDataProps {
@@ -10,6 +11,8 @@ interface FormDataProps {
 }
 
 const Page = ({}) => {
+	useToggleActiveElements('link-container')
+
 	const formData: FormDataProps = {
 		selectedIndex: null
 	}
