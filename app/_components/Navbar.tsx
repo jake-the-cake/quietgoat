@@ -39,8 +39,7 @@ function ToggleElement({ elementType, element }: ToggleElementProps ) {
 function ToggleActiveElement({ containerId, classList, elementType, elementData }: ToggleActiveElementProps): React.JSX.Element {
   useEffect(() => {
     useToggleActiveElements(containerId)
-  }, []
-  )
+  }, [])
   if (Array.isArray(classList)) {
     let classListFromArray: string = ''
     classList.forEach(className => {
