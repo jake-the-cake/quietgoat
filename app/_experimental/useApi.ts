@@ -10,16 +10,26 @@ type ReasonAnyVoid = (reason?: any) => void
 function useFormSubmission(url: string, method: string) {
 	return async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
-		
+		const targetForm = event.target as HTMLFormElement
 		const formData: {[key: string]: any} = {}
+		const formElements = Array.from(targetForm.children[3].children[1].children)
+
+
 
 		try {
 			const form = new FormData(event.target as any)
-			console.log(form)
+			// console.log(form)
 			Array.from(form.entries()).forEach((entry) => {
 				const [key, value]: [key: string, value: FormDataEntryValue] = entry
 				formData[key] = value.toString()
 			})
+			formElements.forEach((element: any) => {
+				const index = element.id.split('-').at(-1)
+				let html = element.children[0].innerHTML
+				if (html.slice(html.length-4) === '<br>') html = html.slice(0, html.length-4)
+				if (index) formData[index] = html
+			})
+			console.log(formData)
 
 			const response = await fetch(CONFIG.db.uri + '/api' + url, {
 				method: method,

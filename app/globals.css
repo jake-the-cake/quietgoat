@@ -290,3 +290,26 @@ footer {
 .post__container a:hover h1 {
   color: hsl(var(--accent), .9);
 }
+
+.glass__input {
+  background-color: hsl(var(--light), .3);
+  border-bottom: 3px solid hsl(var(--primary), .5);
+  padding: .4rem;
+  line-height: 1;
+  color: hsl(var(--dark), .9);
+  position: relative;
+}
+
+.glass__input--h2 {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.glass__input--h3 {
+  font-size: 1.3rem;
+  color: hsl(var(--dark), .5);
+}
+
+.glass__input--blob {
+  height: 25rem;
+}

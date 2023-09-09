@@ -4,7 +4,7 @@ import { CONFIG } from '@/app/_config'
 import { useFormSubmission } from '@/app/_experimental/useApi'
 import { parseIntAsNumber } from '@/app/_quiggle/parse/int'
 import { useToggleActiveElements } from '@/app/_quiggle/useToggleActiveElement'
-import React, { MouseEvent } from 'react'
+import React, { MouseEvent, PointerEvent, useEffect } from 'react'
 
 interface FormDataProps {
 	selectedIndex: null | number
@@ -45,6 +45,10 @@ const Page = ({}) => {
 				if (formData.selectedIndex !== null) option.classList.add('text-grey')
 			}
 		})
+	}
+	const placeholder = {
+		title: 'Add A Title',
+		caption: 'Use an optional caption...'
 	}
 
 	return (
@@ -94,27 +98,87 @@ const Page = ({}) => {
 						Tell your story
 					</div>
 					<div className='form-section__content text-dark flex flex-col gap-5 relative'>
-						<div className="entry-form__input--row items-center flex gap-5">
-							<label htmlFor="entry-title">Entry Title</label>
-							<input className='entry-form__input flex-1' type="text" name='title' id='entry-title' />
+
+
+						<div className="entry-form__actions">
+							<span onClick={ () => window.history.back() }>Cancel</span>
+							<button id="save-draft" className='btn btn__primary--outline'>Save Draft</button>
+							<button id="create-entry" className='btn btn__primary'>Submit</button>
 						</div>
-						<div className="entry-form__input--row items-center flex gap-5">
-							<label htmlFor="entry-caption">Entry Caption (Optional)</label>
-							<input className='entry-form__input flex-1' type="text" name='caption' id='entry-caption' />
-						</div>
-						<div className="entry-form__input--row items-center flex flex-col gap-5">
-							<div className="entry-form__actions">
-								<span onClick={ () => window.history.back() }>Cancel</span>
-								<button id="save-draft" className='btn btn__primary--outline'>Save Draft</button>
-								<button id="create-entry" className='btn btn__primary'>Submit</button>
-							</div>
+
+						<GlassElement
+							id='new-entry-title'
+							type='h2'
+							options={{
+								placeholder: placeholder.title,
+								onClick: handleMakeInputActive(placeholder.title)
+							}}
+						/>
+
+						<GlassElement
+							id='new-entry-caption'
+							type='h3'
+							options={{
+								placeholder: placeholder.caption,
+								onClick: handleMakeInputActive(placeholder.caption)
+							}}
+						/>
+
+						<GlassElement
+							id='new-entry-story'
+							type='blob'
+							options={{
+								onClick: handleMakeInputActive()
+							}}
+						/>
+
+						{/* <div className="entry-form__input--row items-center flex flex-col gap-5">
 							<textarea className='entry-form__input w-full' rows={ 20 } name='story' id='entry-story' />
-						</div>
+						</div> */}
 					</div>
 					
 				</div>
 				<input type="hidden" name="category" id='category-selection' />
 			</form>
+		</div>
+	)
+}
+
+type ClickedDiv = PointerEvent<HTMLDivElement>
+
+interface GlassElementProps {
+	id: string
+	type: string
+	options?: {
+		placeholder?: string
+		onClick?: (event: ClickedDiv) => void
+	}
+}
+
+function handleMakeInputActive (placeholder: string = CONFIG.forms.defaultPlaceholder) {
+	return (event: ClickedDiv) => {
+		const target = event.target as HTMLDivElement
+		target.contentEditable = 'true'
+		target.focus()
+		if (target.textContent === placeholder) target.textContent = ''
+		target.addEventListener('focusout', () => {
+			if (target.textContent === '') target.textContent = placeholder
+		})
+	}
+}
+
+function GlassElement ({ id, type, options = {} }: GlassElementProps) {
+	options.placeholder = options?.placeholder ?? 'Enter text...'
+	return (
+		<div
+		 id={ id }
+		>
+			<div
+				className={`glass__input glass__input--${ type }`}
+				onClick={ options.onClick }
+			>
+					{ options.placeholder }
+			</div>
 		</div>
 	)
 }
