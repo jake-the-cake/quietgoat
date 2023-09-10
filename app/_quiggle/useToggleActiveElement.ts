@@ -3,52 +3,52 @@ const GLOBALS = {
 }
 
 function useToggleActiveElements(containerId: string) {
-	const navList = document.getElementById(containerId)!;
-	const navLinks = Array.from(navList.getElementsByTagName('a'));
+		const navList = document.getElementById(containerId)!;
+		const navLinks = Array.from(navList.getElementsByTagName('a'));
 
-	// Set up unique IDs and styles for li and a elements
-	navLinks.forEach((link, index) => {
-		const li = link.parentElement!;
-		const defaultWidth = link.offsetWidth + 32 + 'px'
-		li.id = `navlinkli${index}`;
-		link.id = `navlinka${index}`;
-		li.style.width = defaultWidth;
-		li.style.height = `${link.offsetHeight}px`;
-		li.style.overflow = 'hidden';
-		li.style.display = 'flex'
-		li.style.position = 'relative';
-		link.style.right = '1rem';
-		link.style.position = 'absolute';
+		// Set up unique IDs and styles for li and a elements
+		navLinks.forEach((link, index) => {
+			const li = link.parentElement!;
+			const defaultWidth = link.offsetWidth + 32 + 'px'
+			li.id = `navlinkli${index}`;
+			link.id = `navlinka${index}`;
+			li.style.width = defaultWidth;
+			li.style.height = `${link.offsetHeight}px`;
+			li.style.overflow = 'hidden';
+			li.style.display = 'flex'
+			li.style.position = 'relative';
+			link.style.right = '1rem';
+			link.style.position = 'absolute';
 
-		// Create an array of link objects
-		const linkObject = {
-			href: link.getAttribute('href'),
-			label: link.textContent,
-			blob: link.getAttribute('data-blob'), // Add 'data-blob' attribute if needed
-			index: index,
-			active: false,
-			defaultWidth: defaultWidth
-		};
+			// Create an array of link objects
+			const linkObject = {
+				href: link.getAttribute('href'),
+				label: link.textContent,
+				blob: link.getAttribute('data-blob'), // Add 'data-blob' attribute if needed
+				index: index,
+				active: false,
+				defaultWidth: defaultWidth
+			};
 
-		// Add click event listeners to handle sliding animations
-		link.addEventListener('click', (e) => {
-			// e.preventDefault();
-			toggleLinkVisibility(linkObject);
-			toggleLinkVisibility(linkObjectArray[GLOBALS.activeIndex])
-			GLOBALS.activeIndex = linkObject.index
+			// Add click event listeners to handle sliding animations
+			link.addEventListener('click', (e) => {
+				// e.preventDefault();
+				toggleLinkVisibility(linkObject);
+				toggleLinkVisibility(linkObjectArray[GLOBALS.activeIndex])
+				GLOBALS.activeIndex = linkObject.index
+			});
+
+		linkObjectArray.push(linkObject);
 		});
 
-	linkObjectArray.push(linkObject);
-	});
-
-	// Check for the active index based on the current window.location.pathname
-	const currentPathname = window.location.pathname;
-	const activeIndex = linkObjectArray.findIndex(link => link.href === currentPathname);
-	// Slide the active link open
-	if (activeIndex >= 0) {
-		// linkObjectArray[activeIndex].active = true
-		toggleLinkVisibility(linkObjectArray[activeIndex]);
-	}
+		// Check for the active index based on the current window.location.pathname
+		const currentPathname = window.location.pathname;
+		const activeIndex = linkObjectArray.findIndex(link => link.href === currentPathname);
+		// Slide the active link open
+		if (activeIndex >= 0) {
+			// linkObjectArray[activeIndex].active = true
+			toggleLinkVisibility(linkObjectArray[activeIndex]);
+		}
 }
 
 const linkObjectArray: any[] = [];

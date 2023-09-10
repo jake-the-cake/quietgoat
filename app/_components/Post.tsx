@@ -25,7 +25,7 @@ function Post({ post, preview }: PostProps): JSX.Element  {
     if (current && current.offsetHeight > 160 && preview) {
       current.classList.add('post__container--preview')
     }
-  }, [])
+  }, [preview])
 
   const entryTitle = <h1 className="post__header text-primary text-2xl font-bold">{ post.title }</h1>
   
