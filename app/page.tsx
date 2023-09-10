@@ -13,10 +13,10 @@ export default async function Home() {
       {
         data.map((post: any, i: number) => (
           <Post
+            key={`post-${ i }`}
             post={ post }
             preview={ true }
           />
-
         ))
       }
     </main>

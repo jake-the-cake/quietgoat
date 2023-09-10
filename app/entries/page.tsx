@@ -6,10 +6,11 @@ function Page(): JSX.Element  {
     <div>
       <Post
         post={{
-          id: 'id',
+          _id: 'id',
           title: 'Post Title',
           caption: 'Caption(optional)',
-          body: 'This is my post'
+          story: 'This is my post',
+          category: '/'
         }}
       />
     </div>
