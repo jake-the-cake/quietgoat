@@ -22,7 +22,7 @@ const navlinks = [
 	{
 		text: 'Viewpoints',
 		href: '/viewpoints',
-		blob: 'This is the viewpoints section.'
+		blob: 'Higher Perspectives Straight From The Summit Of The Mind'
 	},
 ]
 

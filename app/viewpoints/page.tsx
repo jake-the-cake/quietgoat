@@ -1,30 +1,22 @@
 'use client'
 import React from 'react'
-import { Post } from '../_components/Post'
 import { useGetJsonData } from '../_experimental/api'
+import Feed from '../_components/Feed'
+import { CONFIG } from '../_config'
 
 async function Page () {
-	let posts: any[] = await populateByCategory()
 
 	return (
-		<main className='flex flex-col-reverse gap-4'>
-      {
-				posts.map((post: any, i: number) => (
-					<Post
-						key={`feed-entry-${ i }`}
-						post={ post }
-						preview={ true }
-          />
-				))
-			}
-    </main>
+		<Feed
+			category={ CONFIG.navlinks[4] }
+		/>
 	)
 }
 
-export async function populateByCategory() {
-	const data = await useGetJsonData('/api/entries/read-all', {})
-	const posts = await data.filter((post: any) => post.category === window.location.pathname)
-	return posts
+export async function populateByCategory(href?: string | null) {
+	let data = await useGetJsonData('/api/entries/read-all', {})
+	if (href) data = await data.filter((post: any) => post.category === href)
+	return data
 }
 
 export default Page

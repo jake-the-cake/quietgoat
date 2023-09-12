@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --primary-hue: 160;
+  --primary-hue: 10;
 
   --primary: var(--primary-hue), 100%, 14%;
   --accent: var(--primary-hue), 45%, 42%;
@@ -85,7 +85,7 @@ pre {
 }
 
 #link-container li a:hover {
-  color: hsl(var(--dark));
+  color: hsl(var(--primary));
   text-shadow: 0 0px 3px hsl(var(--light));}
 
 .post__container {
@@ -312,4 +312,16 @@ footer {
 
 .glass__input--blob {
   height: 25rem;
+}
+
+.w-content {
+  width: var(--content-w);
+}
+
+.text-shadow-light {
+  text-shadow: 1px 0px 2px hsl(var(--light), .7);
+}
+
+.small-caps {
+  font-variant: small-caps;
 }
