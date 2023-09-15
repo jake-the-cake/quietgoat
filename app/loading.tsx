@@ -10,13 +10,10 @@ const Loading = () => {
       timerLength: 125,
 			light: true,
     }
-
-    function runLoader() {
-      const loader: HTMLElement | null = document.getElementById('svg-loader')
-			if (!loader) return controller.abort()
-      const loadingBars: HTMLElement[] = [...loader.children[2].children as any]
-      adjustLoaderBars({ loader, loadingBars })
-    }
+		const loader: HTMLElement | null = document.getElementById('svg-loader')
+		if (!loader) return controller.abort()
+		const loadingBars: HTMLElement[] = [...loader.children[2].children as any]
+		adjustLoaderBars({ loader, loadingBars })
     
     function adjustLoaderBars({loader, loadingBars, count = loadingBars.length - 1}: any) {
 			let color: string = ''
@@ -29,7 +26,7 @@ const Loading = () => {
 			}
       if (count === -1) {
 				CONFIG.light = !CONFIG.light
-        runLoader()
+        adjustLoaderBars({loader, loadingBars})
 			}
       else setTimeout(() => {
 				const opacity = '.' + (((count + 1) * 2 - 1))
@@ -37,7 +34,6 @@ const Loading = () => {
         adjustLoaderBars({loader, loadingBars, count: count - 1})
       }, CONFIG.timerLength)
     }
-    runLoader()
 		window.scrollTo(0, 0)
 		return controller.abort()
 	}, [])
