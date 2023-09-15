@@ -12,9 +12,9 @@ const Loading = () => {
     }
 
     function runLoader() {
-      const loader = document.getElementById('svg-loader')
+      const loader: HTMLElement | null = document.getElementById('svg-loader')
 			if (!loader) return controller.abort()
-      const loadingBars = Array.from(Array.from(loader.children)[2].children)
+      const loadingBars: HTMLElement[] = [...loader.children[2].children as any]
       adjustLoaderBars({ loader, loadingBars })
     }
     
@@ -44,7 +44,7 @@ const Loading = () => {
 
 	return (
 		<svg id="svg-loader"
-			className='flex justify-center w-full h-auto'
+			className='flex justify-center w-full'
 			xmlns="http://www.w3.org/2000/svg"
 			width="200"
 			height="200"
