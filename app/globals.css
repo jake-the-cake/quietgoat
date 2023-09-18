@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --primary-hue: 10;
+  --primary-hue: 110;
 
   --primary: var(--primary-hue), 100%, 14%;
   --accent: var(--primary-hue), 45%, 42%;

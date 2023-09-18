@@ -59,10 +59,8 @@ function Post({ post, preview }: PostProps): JSX.Element  {
           onClick={ preview 
             ? unhidePreview
             : () => false }
-        >
-          { story.map((paragraph: string, i: number) => <p key={`paragraph-${ i }`}>{ paragraph }</p>) }
-        </section>
-
+          dangerouslySetInnerHTML={{ __html: story }}
+        />
       </article>
   )
 }
