@@ -35,7 +35,7 @@ interface FormSection {
 	elements: (FormElement | Partial<FormElement> | string)[]
 }
 
-interface IKGlassForm {
+interface IGlassForm {
 	sections: FormSection[]
 }
 
@@ -45,7 +45,23 @@ function GlassFormElement({ element }: { element: FormElement }) {
 		case undefined:
 			return <div className='form-section__content text-dark m-auto'>{ element.justText }</div>
 		case FormElementType.pickOne:
-			return
+			console.log(element.options)
+			return <div className='form-section__content text-dark flex justify-between relative'>
+ 				{
+						element.options?.map((entryType, i) => {
+							const idKey = `entry-selector-${ i }`
+							return (
+								 <div
+									className='m-auto flex gap-1 cat-selector__radio' 
+									key={ idKey }
+									id={ idKey }
+								>
+									{ entryType?.text ?? 'hi' }
+								</div>
+							 )
+						}) ?? <div className='text-dark'>oops</div>
+					}
+				</div>
 	}
 }
 
@@ -76,7 +92,7 @@ function GlassFormSection({ section }: { section: FormSection } ) {
 	)
 }
 
-function GlassForm({ sections }: IKGlassForm): React.JSX.Element {
+function GlassForm({ sections }: IGlassForm): React.JSX.Element {
 	const formSections: any[] = []
 	const errorLog: any[] = []
 	sections.forEach((section) => {

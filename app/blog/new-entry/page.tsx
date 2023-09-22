@@ -62,6 +62,7 @@ const Page = ({}) => {
 						{
 							type: FormElementType.pickOne,
 							id: '',
+							options: CONFIG.navlinks.slice(1) as any
 
 						}, 'thing'
 					]
