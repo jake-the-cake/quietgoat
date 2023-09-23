@@ -1,10 +1,11 @@
 'use client'
 
+import GlassForm from '@/app/_components/GlassForm'
 import { CONFIG } from '@/app/_config'
 import { useFormSubmission } from '@/app/_experimental/useApi'
-import GlassForm, { FormElementType } from '@/app/_experimental/useGlassForm'
 import { parseIntAsNumber } from '@/app/_quiggle/parse/int'
 import { useToggleActiveElements } from '@/app/_quiggle/useToggleActiveElement'
+import { FormElementType } from '@/app/_types/forms'
 import React, { MouseEvent, PointerEvent } from 'react'
 
 interface FormDataProps {
@@ -12,7 +13,37 @@ interface FormDataProps {
 }
 
 const Page = ({}) => {
-	// useToggleActiveElements('link-container')
+	useToggleActiveElements('link-container')
+
+	const sections = [
+		{
+			label: 'Select Entry Category',
+			elements: [ CONFIG.forms.elements.category ]
+		},
+		{
+			label: 'Additional Information',
+			isOptional: true,
+			elements: ['']
+		},
+		{
+			label: 'Tell Your Story',
+			elements: [
+				CONFIG.forms.elements.title,
+				CONFIG.forms.elements.caption
+			]
+		}
+	]
+
+	return (
+		<GlassForm
+			sections={ sections }
+		/>
+	)
+}
+
+
+
+
 
 	// const formData: FormDataProps = {
 	// 	selectedIndex: null
@@ -52,25 +83,6 @@ const Page = ({}) => {
 	// 	caption: 'Use an optional caption...'
 	// }
 		
-		return (
-			<GlassForm
-			sections={[
-				{
-					label: 'Select Entry Category',
-					// isOptional: true,
-					elements: [
-						{
-							type: FormElementType.pickOne,
-							id: '',
-							options: CONFIG.navlinks.slice(1) as any
-
-						}, 'thing'
-					]
-				}	
-			]}
-		/>
-		)
-	}
 	// <div
 	// 	className='card__container--full'
 	// >
@@ -170,34 +182,6 @@ interface GlassElementProps {
 		placeholder?: string
 		onClick?: (event: ClickedDiv) => void
 	}
-}
-
-function handleMakeInputActive (placeholder: string = CONFIG.forms.defaultPlaceholder) {
-	return (event: ClickedDiv) => {
-		const target = event.target as HTMLDivElement
-		target.contentEditable = 'true'
-		target.focus()
-		if (target.textContent === placeholder) target.textContent = ''
-		target.addEventListener('focusout', () => {
-			if (target.textContent === '') target.textContent = placeholder
-		})
-	}
-}
-
-function GlassElement ({ id, type, options = {} }: GlassElementProps) {
-	options.placeholder = options?.placeholder ?? 'Enter text...'
-	return (
-		<div
-		 id={ id }
-		>
-			<div
-				className={`glass__input glass__input--${ type }`}
-				onClick={ options.onClick }
-			>
-					{ options.placeholder }
-			</div>
-		</div>
-	)
 }
 
 export default Page

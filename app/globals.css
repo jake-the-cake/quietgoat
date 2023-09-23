@@ -181,12 +181,14 @@ footer {
 }
 
 .cat-selector__radio:hover,
+.cat-selector__radio:focus,
 .selected-cat {
   background-color: hsl(var(--accent), .4);
   color: hsl(var(--dark), .9) !important;
 }
 
-.cat-selector__radio:hover::after {
+.cat-selector__radio:hover::after,
+.cat-selector__radio:focus::after {
   border-color: white;
   outline-color: hsl(var(--primary), .9);
   background-color: hsl(var(--primary), .6);

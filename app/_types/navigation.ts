@@ -1,7 +1,7 @@
 interface NavLinkInfo {
   href?: string
   src?: string
-  text?: string
+  label?: string
   blob?: string
 }
 

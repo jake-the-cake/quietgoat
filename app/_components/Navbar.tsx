@@ -30,7 +30,7 @@ function ToggleElement({ elementType, element }: ToggleElementProps ) {
         <Link
           href={ element.href! }
           className='absolute'
-        >{ element.text }
+        >{ element.label }
         </Link>
       )
     }
