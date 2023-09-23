@@ -1,11 +1,47 @@
-import React, { MouseEventHandler, useEffect } from 'react'
+import React, { MouseEvent, MouseEventHandler, useEffect } from 'react'
 import { ClickedDiv, FormElement, FormElementType, FormSection, IGlassForm } from '../_types/forms'
 import { basicErrorLog } from '../_experimental/errors'
 import { CONFIG } from '../_config'
+import { parseIntAsNumber } from '../_quiggle/parse/int'
+import { useFormSubmission } from '../_experimental/useApi'
+
+const formData: any = {
+	selectedIndex: null
+}
+
+function handleSelectedItem(e: MouseEvent<HTMLDivElement>) {
+	const selectorInput = document.getElementById('single-selector-category-input') as HTMLInputElement
+
+	const target = e.target as HTMLDivElement
+	if (target.classList.contains('form-section__content')) return
+	
+	const selectedIndex = parseIntAsNumber(target.id)!
+	const options: Element[] = Array.from(target.parentNode!.children)
+	const className = 'selected-cat'
+	
+	if (formData.selectedIndex === selectedIndex) {
+		formData.selectedIndex = null
+		target.classList.remove(className)
+		target.blur()
+		selectorInput.value = ''
+	}
+	else {
+		formData.selectedIndex = selectedIndex
+		target.classList.add(className)
+		selectorInput.value = '/' + target.textContent?.split(' ').join('-').toLowerCase()!
+	}
+	options.forEach(option => {
+		option.classList.remove('text-grey')
+		if (parseIntAsNumber(option.id) !== selectedIndex) {
+			option.classList.remove(className)
+			if (formData.selectedIndex !== null) option.classList.add('text-grey')
+		}
+	})
+}
 
 function GlassFormSingleSelector({ element }: { element: FormElement }) {
 	const id = {
-		selector: 'single-selector' + element.id,
+		selector: 'single-selector-' + element.id,
 		option: 'ss-option-' + element.id + '-'
 	}
 	return (
@@ -23,7 +59,7 @@ function GlassFormSingleSelector({ element }: { element: FormElement }) {
 							id={ idKey }
 							//@ts-ignore
 							onFocus={ setFormFocus(idKey) }
-							onClick={ setFormFocus(idKey) }
+							onClick={ handleSelectedItem }
 							tabIndex={0}
 						>
 							{ entryType?.label ?? 'hi' }
@@ -31,6 +67,7 @@ function GlassFormSingleSelector({ element }: { element: FormElement }) {
 					)
 				})
 			}
+			<input type="hidden" id={ id.selector + '-input' } />
 		</div>
 	)
 }
@@ -101,7 +138,7 @@ function GlassFormInputLine({ element }: { element: FormElement }) {
 }
 
 function GlassFormInputBlock({ element }: { element: FormElement }) {
-	const id = 'input-line-' + element.id
+	const id = 'input-block-' + element.id
 	if (!element.defaultValue) element.defaultValue = CONFIG.forms.defaults.placeholder
 
 	return (
@@ -184,7 +221,7 @@ function GlassFormSection({ section }: { section: FormSection } ) {
 	)
 }
 
-function GlassForm({ sections }: IGlassForm): React.JSX.Element {
+function GlassForm({ sections, formTitle }: IGlassForm): React.JSX.Element {
 	const formSections: any[] = []
 	const errorLog: any[] = []
 	sections.forEach((section) => {
@@ -196,8 +233,15 @@ function GlassForm({ sections }: IGlassForm): React.JSX.Element {
 		else formSections.push(section)
 	})
 
+	const title = formTitle
+		?	<h1 className='text-3xl text-primary font-bold mb-6'>
+				{ formTitle }
+			</h1>
+		: null
+
 	return (
 		<div className='card__container--full'>
+			{	title	}
 			<form className='flex flex-col gap-6' id="new-post-form">
 				{
 					formSections.map((section, i) =>	
@@ -207,9 +251,58 @@ function GlassForm({ sections }: IGlassForm): React.JSX.Element {
 						/>
 					)
 				}
+				<div className="entry-form__actions">
+					
+					{ /* Cancel button */}
+					<span
+						onClick={ () => window.history.back() }
+						tabIndex={0}
+					>Cancel</span>
+
+					{ /* Save Draft button */}
+					<button
+						id="save-draft"
+						className='btn btn__primary--outline'
+					>Save Draft</button>
+					
+					{ /* Submit button */}
+					<button
+						id="create-entry"
+						className='btn btn__primary'
+						onClick={ handleSubmitEntry }
+					>Submit</button>
+
+				</div>
 			</form>
 		</div>
 	)
 }
+
+function handleSubmitEntry(event: MouseEvent<HTMLButtonElement>) {
+	event.preventDefault()
+	const category = (document.getElementById('single-selector-category-input') as HTMLInputElement)?.value ?? null
+	console.log(category)
+
+	const data = {
+		category: (document.getElementById('single-selector-category-input') as HTMLInputElement).value,
+		title: (document.getElementById('input-line-title') as HTMLDivElement).innerText,
+		caption: (document.getElementById('input-line-caption') as HTMLDivElement).innerText,
+		story: (document.getElementById('input-block-story') as HTMLDivElement).innerHTML,
+	}
+	// if (data.category === '') return
+	if (!category) return console.warn('category required')
+	fetch(CONFIG.db.uri + '/api/blog-entry', {
+		method: 'POST',
+		mode: 'cors',
+		headers: {
+				"Content-Type": "application/json",
+				'Access-Control-Allow-Headers': '*'
+		},
+		body: JSON.stringify(data)
+	}).then(response => response.json()).then(data => {
+		console.log(data)
+	}).catch(err => console.log(err))
+}
+
 
 export default GlassForm

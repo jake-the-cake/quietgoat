@@ -15,7 +15,7 @@ export async function POST(req: Request){
 		newPost.save()
 		return NextResponse.json(newPost)
 	}
-	catch (error) { basicErrorLog(error) }
+	catch (error) {	basicErrorLog(error) }
 }
 
 function validateData(data: {[key: string]: any}, validators: {[key: string]: any}): void | { errors: any[] } {

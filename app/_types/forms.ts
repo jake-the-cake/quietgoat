@@ -39,4 +39,5 @@ export interface FormSection {
 
 export interface IGlassForm {
 	sections: FormSection[]
+	formTitle?: string
 }
