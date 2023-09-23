@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { MouseEventHandler, useEffect } from 'react'
 import { ClickedDiv, FormElement, FormElementType, FormSection, IGlassForm } from '../_types/forms'
 import { basicErrorLog } from '../_experimental/errors'
 import { CONFIG } from '../_config'
@@ -21,7 +21,10 @@ function GlassFormSingleSelector({ element }: { element: FormElement }) {
 							className='m-auto cat-selector__radio' 
 							key={ idKey }
 							id={ idKey }
-							tabIndex={0}								
+							//@ts-ignore
+							onFocus={ setFormFocus(idKey) }
+							onClick={ setFormFocus(idKey) }
+							tabIndex={0}
 						>
 							{ entryType?.label ?? 'hi' }
 						</div>
@@ -32,12 +35,27 @@ function GlassFormSingleSelector({ element }: { element: FormElement }) {
 	)
 }
 
-function handleMakeInputActive (placeholder: string = CONFIG.forms.defaults.placeholder) {
+interface FormFocusOptions {
+	noScroll?: boolean
+}
+
+function setFormFocus( elementId: string, options?: FormFocusOptions ) {
+	return () => {
+		const element = document.getElementById(elementId)
+		if (!element) return
+		const scrollPosition = element.getBoundingClientRect().top + window.scrollY - 150;
+		element.focus()
+		if (options?.noScroll !== true) window.scrollTo({ top: scrollPosition, behavior: 'smooth'})
+	}
+}
+
+function handleMakeInputActive(placeholder: string = CONFIG.forms.defaults.placeholder) {
 	return (event: ClickedDiv) => {
 		const target = event.target as HTMLDivElement
+		const focus = setFormFocus(target.id)
 		target.contentEditable = 'true'
-		target.focus()
-		if (target.textContent === placeholder) target.textContent = ''
+		if (target.textContent === placeholder) target.textContent = '';
+		focus!()
 		target.addEventListener('focusout', () => {
 			if (target.textContent === '') target.textContent = placeholder
 		})
@@ -82,6 +100,28 @@ function GlassFormInputLine({ element }: { element: FormElement }) {
 	)
 }
 
+function GlassFormInputBlock({ element }: { element: FormElement }) {
+	const id = 'input-line-' + element.id
+	if (!element.defaultValue) element.defaultValue = CONFIG.forms.defaults.placeholder
+
+	return (
+		<div
+			className='form-section__content'
+		>
+			<div
+				id={ id }
+				className={`glass__input glass__input--blob`}
+				onClick={ handleMakeInputActive(element.defaultValue) }
+				//@ts-ignore
+				onFocus={ handleMakeInputActive(element.defaultValue) }
+				tabIndex={0}
+			>
+					{ element.defaultValue }
+			</div>
+		</div>
+	)
+}
+
 function GlassFormElement({ element }: { element: FormElement }) {
 	switch (element.type) {
 		case undefined:
@@ -101,6 +141,12 @@ function GlassFormElement({ element }: { element: FormElement }) {
 		case FormElementType.inputLine:
 			return (
 				<GlassFormInputLine
+					element={ element }
+				/>
+			)
+		case FormElementType.inputBlock:
+			return (
+				<GlassFormInputBlock
 					element={ element }
 				/>
 			)

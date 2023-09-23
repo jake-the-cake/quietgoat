@@ -22,6 +22,10 @@ const elements: {[key: string]: FormElement} = {
 		details: {
 			variant: 'h3'
 		}
+	},
+	story: {
+		type: FormElementType.inputBlock,
+		id: 'story'
 	}
 }
 

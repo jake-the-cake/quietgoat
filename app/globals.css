@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --primary-hue: 110;
+  --primary-hue: 140;
 
-  --primary: var(--primary-hue), 100%, 14%;
-  --accent: var(--primary-hue), 45%, 42%;
+  --primary: var(--primary-hue), 95%, 16%;
+  --accent: var(--primary-hue), 59%, 44%;
 
   --dark: 0, 0%, 8%;
   --light: var(--primary-hue), 100%, 92%;
@@ -14,8 +14,14 @@
   --content-w: 40rem;
 }
 
-html {
+* {
   box-sizing: border-box;
+}
+
+*:focus {
+  outline: unset;
+  outline: 3px solid hsl(var(--accent), .5);
+  outline-offset: 3px;
 }
 
 body {

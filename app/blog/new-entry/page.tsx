@@ -29,7 +29,8 @@ const Page = ({}) => {
 			label: 'Tell Your Story',
 			elements: [
 				CONFIG.forms.elements.title,
-				CONFIG.forms.elements.caption
+				CONFIG.forms.elements.caption,
+				CONFIG.forms.elements.story
 			]
 		}
 	]
