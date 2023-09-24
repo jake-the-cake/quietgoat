@@ -5,9 +5,13 @@ import { CONFIG } from '../_config'
 import { parseIntAsNumber } from '../_quiggle/parse/int'
 import { useFormSubmission } from '../_experimental/useApi'
 
-const formData: any = {
-	selectedIndex: null
-}
+// interface FormDataProps {
+// 	selectedIndex: null | number
+// }
+
+// const formData: FormDataProps = {
+// 	selectedIndex: null
+// }
 
 function handleSelectedItem(e: MouseEvent<HTMLDivElement>) {
 	const selectorInput = document.getElementById('single-selector-category-input') as HTMLInputElement
@@ -19,24 +23,33 @@ function handleSelectedItem(e: MouseEvent<HTMLDivElement>) {
 	const options: Element[] = Array.from(target.parentNode!.children)
 	const className = 'selected-cat'
 	
-	if (formData.selectedIndex === selectedIndex) {
-		formData.selectedIndex = null
-		target.classList.remove(className)
-		target.blur()
-		selectorInput.value = ''
-	}
-	else {
-		formData.selectedIndex = selectedIndex
-		target.classList.add(className)
-		selectorInput.value = '/' + target.textContent?.split(' ').join('-').toLowerCase()!
-	}
-	options.forEach(option => {
-		option.classList.remove('text-grey')
-		if (parseIntAsNumber(option.id) !== selectedIndex) {
-			option.classList.remove(className)
-			if (formData.selectedIndex !== null) option.classList.add('text-grey')
-		}
-	})
+	console.log(selectedIndex)
+
+
+
+
+
+	
+	// console.log(formData.selectedIndex)
+
+	// if (formData.selectedIndex === selectedIndex) {
+	// 	formData.selectedIndex = null
+	// 	target.classList.remove(className)
+	// 	target.blur()
+	// 	selectorInput.value = ''
+	// }
+	// else {
+	// 	formData.selectedIndex = selectedIndex
+	// 	target.classList.add(className)
+	// 	selectorInput.value = '/' + target.textContent?.split(' ').join('-').toLowerCase()!
+	// }
+	// options.forEach(option => {
+	// 	option.classList.remove('text-grey')
+	// 	if (parseIntAsNumber(option.id) !== selectedIndex) {
+	// 		option.classList.remove(className)
+	// 		if (formData.selectedIndex !== null) option.classList.add('text-grey')
+	// 	}
+	// })
 }
 
 function GlassFormSingleSelector({ element }: { element: FormElement }) {
@@ -284,13 +297,14 @@ function handleSubmitEntry(event: MouseEvent<HTMLButtonElement>) {
 	console.log(category)
 
 	const data = {
-		category: (document.getElementById('single-selector-category-input') as HTMLInputElement).value,
+		// category: (document.getElementById('single-selector-category-input') as HTMLInputElement).value,
+		category,
 		title: (document.getElementById('input-line-title') as HTMLDivElement).innerText,
 		caption: (document.getElementById('input-line-caption') as HTMLDivElement).innerText,
 		story: (document.getElementById('input-block-story') as HTMLDivElement).innerHTML,
 	}
-	// if (data.category === '') return
-	if (!category) return console.warn('category required')
+	if (!data.category) console.log('no category') //return
+	if (!category) console.warn('category required') //return
 	fetch(CONFIG.db.uri + '/api/blog-entry', {
 		method: 'POST',
 		mode: 'cors',

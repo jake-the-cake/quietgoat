@@ -20,7 +20,7 @@ async function Page({ params }: any): Promise<React.JSX.Element>  {
 
 function getLinkInfo(entryCategory: string) {
   const links = CONFIG.navlinks
-  return links.filter((link: any) => link.href === entryCategory )[0].text
+  return links.filter((link: any) => link.href === entryCategory )[0].label
 }
 
 export default Page

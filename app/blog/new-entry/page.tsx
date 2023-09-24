@@ -5,10 +5,6 @@ import { CONFIG } from '@/app/_config'
 import { useToggleActiveElements } from '@/app/_quiggle/useToggleActiveElement'
 import React, { PointerEvent } from 'react'
 
-interface FormDataProps {
-	selectedIndex: null | number
-}
-
 const Page = ({}) => {
 	useToggleActiveElements('link-container')
 
@@ -42,13 +38,13 @@ const Page = ({}) => {
 
 type ClickedDiv = PointerEvent<HTMLDivElement>
 
-interface GlassElementProps {
-	id: string
-	type: string
-	options?: {
-		placeholder?: string
-		onClick?: (event: ClickedDiv) => void
-	}
-}
+// interface GlassElementProps {
+// 	id: string
+// 	type: string
+// 	options?: {
+// 		placeholder?: string
+// 		onClick?: (event: ClickedDiv) => void
+// 	}
+// }
 
 export default Page
