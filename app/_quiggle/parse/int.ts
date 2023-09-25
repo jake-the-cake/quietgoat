@@ -1,6 +1,6 @@
-function parseIntAsNumber(targetId: string) {
+function parseIntAsNumber(value: string) {
 
-	const digitsArray = targetId.match(/\d+/g);
+	const digitsArray = value.match(/\d+/g);
 
 	if (digitsArray && digitsArray.length > 0) {
 
@@ -12,6 +12,16 @@ function parseIntAsNumber(targetId: string) {
 	}
 }
 
+function removeTailingInt(value: string): string {
+	const characters = value.split('')
+	for (let i = characters.length - 1; i >= 0; i--) {
+		if (Number(characters[i]) * 0 === 0) characters.pop()
+		else return characters.join('')
+	}
+	return value
+}
+
 export {
-	parseIntAsNumber
+	parseIntAsNumber,
+	removeTailingInt
 }

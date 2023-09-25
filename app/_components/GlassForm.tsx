@@ -1,17 +1,17 @@
-import React, { MouseEvent, MouseEventHandler, useEffect } from 'react'
+import React, { MouseEvent, MouseEventHandler, PointerEvent, useEffect } from 'react'
 import { ClickedDiv, FormElement, FormElementType, FormSection, IGlassForm } from '../_types/forms'
 import { basicErrorLog } from '../_experimental/errors'
 import { CONFIG } from '../_config'
-import { parseIntAsNumber } from '../_quiggle/parse/int'
+import { parseIntAsNumber, removeTailingInt } from '../_quiggle/parse/int'
 import { useFormSubmission } from '../_experimental/useApi'
 
-// interface FormDataProps {
-// 	selectedIndex: null | number
-// }
+interface FormDataProps {
+	selectedIndex: null | number
+}
 
-// const formData: FormDataProps = {
-// 	selectedIndex: null
-// }
+const formData: FormDataProps = {
+	selectedIndex: null
+}
 
 function handleSelectedItem(e: MouseEvent<HTMLDivElement>) {
 	const selectorInput = document.getElementById('single-selector-category-input') as HTMLInputElement
@@ -23,33 +23,66 @@ function handleSelectedItem(e: MouseEvent<HTMLDivElement>) {
 	const options: Element[] = Array.from(target.parentNode!.children)
 	const className = 'selected-cat'
 	
-	console.log(selectedIndex)
+	if (formData.selectedIndex === selectedIndex) {
+		formData.selectedIndex = null
+		target.classList.remove(className)
+		target.blur()
+		selectorInput.value = ''
+	}
+	else {
+		formData.selectedIndex = selectedIndex
+		target.classList.add(className)
+		selectorInput.value = '/' + target.textContent?.split(' ').join('-').toLowerCase()!
+	}
+	options.forEach(option => {
+		option.classList.remove('text-grey')
+		if (parseIntAsNumber(option.id) !== selectedIndex) {
+			option.classList.remove(className)
+			if (formData.selectedIndex !== null) option.classList.add('text-grey')
+		}
+	})
+}
 
-
-
-
-
+function handleKeyboardSelect(event: PointerEvent<HTMLDivElement>) {
+	const target = event.target as HTMLDivElement
 	
-	// console.log(formData.selectedIndex)
-
-	// if (formData.selectedIndex === selectedIndex) {
-	// 	formData.selectedIndex = null
-	// 	target.classList.remove(className)
-	// 	target.blur()
-	// 	selectorInput.value = ''
-	// }
-	// else {
-	// 	formData.selectedIndex = selectedIndex
-	// 	target.classList.add(className)
-	// 	selectorInput.value = '/' + target.textContent?.split(' ').join('-').toLowerCase()!
-	// }
-	// options.forEach(option => {
-	// 	option.classList.remove('text-grey')
-	// 	if (parseIntAsNumber(option.id) !== selectedIndex) {
-	// 		option.classList.remove(className)
-	// 		if (formData.selectedIndex !== null) option.classList.add('text-grey')
-	// 	}
-	// })
+	function selectWithKeys(event: KeyboardEvent) {
+		const { keyCode, code, key } = event
+		if (keyCode === 37 || keyCode === 39) {
+			const target = event.target as HTMLDivElement
+			const id: string = removeTailingInt(target.id)
+			let count: number | null = 0
+			const options = []
+			while (typeof count === 'number') {
+				const option = document.getElementById(id + count)
+				if (!option) count = null
+				else {
+					options.push(option)
+					count++
+				}
+			}
+			count = parseIntAsNumber(target.id) || 0
+			switch (keyCode) {
+				case 37:
+					count = count - 2
+				case 39:
+					count!++
+				default:
+					if (count === -1) count = options.length - 1
+					if (count === options.length) count = 0
+					options[count!].focus()
+			}
+		}
+		if (key === 'Enter' || key === ' ') {
+			event.preventDefault()
+			target.click()
+			target.focus()
+		}
+	}
+	target.addEventListener('keydown', selectWithKeys)
+	target.addEventListener('focusout', () => {
+		target.removeEventListener('keypress', selectWithKeys	)
+	})
 }
 
 function GlassFormSingleSelector({ element }: { element: FormElement }) {
@@ -71,7 +104,7 @@ function GlassFormSingleSelector({ element }: { element: FormElement }) {
 							key={ idKey }
 							id={ idKey }
 							//@ts-ignore
-							onFocus={ setFormFocus(idKey) }
+							onFocus={ handleKeyboardSelect }
 							onClick={ handleSelectedItem }
 							tabIndex={0}
 						>
