@@ -268,7 +268,17 @@ function GlassFormSection({ section }: { section: FormSection } ) {
 }
 
 function GlassForm({ sections, formTitle }: IGlassForm): React.JSX.Element {
+	const defaults: { [key: string]: any } = {
+		title: CONFIG.forms.elements.title.defaultValue,
+		caption: CONFIG.forms.elements.caption.defaultValue,
+		story: CONFIG.forms.elements.story.defaultValue
+	}
+	Object.entries(defaults).forEach(([key, value]: any) => {
+		if (!value) defaults[key] = CONFIG.forms.defaults.placeholder
+	})
+	console.log(defaults)
 	const formSections: any[] = []
+	
 	const errorLog: any[] = []
 	sections.forEach((section) => {
 		if (!section.label) errorLog.push(new SyntaxError('You must provide a section label.'))
@@ -315,7 +325,7 @@ function GlassForm({ sections, formTitle }: IGlassForm): React.JSX.Element {
 					<button
 						id="create-entry"
 						className='btn btn__primary'
-						onClick={ handleSubmitEntry }
+						onClick={ handleSubmitEntry({ defaults }) }
 					>Submit</button>
 
 				</div>
@@ -324,31 +334,64 @@ function GlassForm({ sections, formTitle }: IGlassForm): React.JSX.Element {
 	)
 }
 
-function handleSubmitEntry(event: MouseEvent<HTMLButtonElement>) {
-	event.preventDefault()
-	const category = (document.getElementById('single-selector-category-input') as HTMLInputElement)?.value ?? null
-	console.log(category)
+interface FormValidation {
+	defaults?: { [key: string]: string }
+	required?: string[]
+}
 
-	const data = {
-		// category: (document.getElementById('single-selector-category-input') as HTMLInputElement).value,
-		category,
-		title: (document.getElementById('input-line-title') as HTMLDivElement).innerText,
-		caption: (document.getElementById('input-line-caption') as HTMLDivElement).innerText,
-		story: (document.getElementById('input-block-story') as HTMLDivElement).innerHTML,
+interface FormValidationError {
+	id: string
+	err: Error
+}
+
+function handleSubmitEntry({ defaults, required }: FormValidation) {
+	return (event: MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault()
+		const errorLog: FormValidationError[] = []
+		const elements: { [key: string]: HTMLElement | null | any } = {
+			category: document.getElementById('single-selector-category-input'),
+			title: document.getElementById('input-line-title'),
+			caption: document.getElementById('input-line-caption'),
+			story: document.getElementById('input-block-story')
+		}
+		const data: { [key: string]: string } = {
+			category: elements.category?.value || '',
+			title: elements.title?.innerText || '',
+			caption: elements.caption?.innerText || '',
+			story: elements.story?.innerHTML || '',
+		}
+
+		if (required) {
+
+			required.forEach((prop, i) => {
+				if (!data[prop]) errorLog.push({
+					id: '',
+					err: new Error('required')
+				})
+			}
+			)
+		}
+	
+		console.log(errorLog)
+		if (!data.category) console.warn('no category')
+		if (data.title === defaults!.title) console.warn('add a title')
+		if (data.story === defaults!.story) console.warn('add a story')
+		if (data.caption === defaults!.caption) data.caption = ''
+		
+		
+		// fetch(CONFIG.db.uri + '/api/blog-entry', {
+		// 	method: 'POST',
+		// 	mode: 'cors',
+		// 	headers: {
+		// 			"Content-Type": "application/json",
+		// 			'Access-Control-Allow-Headers': '*'
+		// 	},
+		// 	body: JSON.stringify(data)
+		// }).then(response => response.json()).then(data => {
+		// 	console.log(data)
+		// }).catch(err => console.log(err))
+	
 	}
-	if (!data.category) console.log('no category') //return
-	if (!category) console.warn('category required') //return
-	fetch(CONFIG.db.uri + '/api/blog-entry', {
-		method: 'POST',
-		mode: 'cors',
-		headers: {
-				"Content-Type": "application/json",
-				'Access-Control-Allow-Headers': '*'
-		},
-		body: JSON.stringify(data)
-	}).then(response => response.json()).then(data => {
-		console.log(data)
-	}).catch(err => console.log(err))
 }
 
 
